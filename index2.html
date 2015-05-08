@@ -1,0 +1,207 @@
+//This is not yet complete. In the process of changing from 1D array to 2D array.
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Pacman Game</title>
+  <meta name="description" content="PacMan game implementation for web development class.">
+  <meta name="author" content="Launa Bodde">
+  
+  <link rel="stylesheet" type="text/css" href="PacMan.css">
+  <audio id="pacman_chomp" src="audio/pacman_chomp.wav" preload="auto"></audio>
+  <a href="javascript:play_single_sound();">
+</head>
+
+<body>
+  <div class="container">
+    <div id="world"></div>
+    <div id="score" class="score"></div>
+    <div id="lives" class="lives"></div>
+  </div>
+
+<script type="text/javascript">
+  var pacman = 
+  {
+    x: 10,
+    y: 10,
+  }
+  
+  var brick = 
+  {
+    x:0,
+    y:0,
+  }
+
+  var coin = 
+  {
+    x:0,
+    y:0,
+  }
+
+  var score = 0;
+  var lives = 3;
+  var pacman_direction = "right";
+  var world = 
+  [
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,1,0,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,0],
+    [0,1,0,1,0,1,0,1,0,0,1,0,1,0,1,0,1,0,1,0],
+    [0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,0,1,0],
+    [0,1,0,0,0,1,0,1,0,0,0,0,0,1,0,0,1,0,1,0],
+    [0,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0],
+    [0,1,1,1,1,1,0,1,0,0,1,0,0,0,0,0,1,0,1,0],
+    [0,0,0,0,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,0],
+    [0,1,1,1,0,1,0,1,0,0,0,0,0,1,0,0,0,0,1,0],
+    [0,1,0,1,0,1,0,1,1,1,1,1,0,1,0,0,1,1,1,0],
+    [0,1,0,1,1,1,0,0,0,0,2,1,1,1,0,0,1,0,1,0],
+    [0,1,0,1,0,1,1,1,1,1,1,0,0,1,1,0,1,0,1,0],
+    [0,1,0,1,0,1,0,1,0,0,1,0,0,0,1,0,1,1,1,0],
+    [0,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,0,1,0],
+    [0,1,0,0,1,0,0,1,0,1,0,1,0,1,0,1,0,0,1,0],
+    [0,1,0,0,1,1,1,1,1,1,0,1,0,1,1,1,0,0,1,0],
+    [0,1,1,1,1,0,0,0,0,1,1,1,0,1,0,1,1,1,1,0],
+    [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+  ];
+
+    function draw_world()
+    {
+      document.getElementById('world').innerHTML = "";
+      
+      for(var x = 0; x < world.length; x++)
+      {
+        for(var y = 0; y < world[x].length; y++)
+        {
+          if(world[x][y] == 0)
+          {
+            // draw a brick
+           document.getElementById('world').innerHTML = 
+            document.getElementById('world').innerHTML +
+            "<div class='brick' style='top:" + x * 16 + "px; left:" + y * 16 + "px'></div>";
+
+          }
+          else if(world[x][y] == 1)
+          {
+            // draw a coin
+          document.getElementById('world').innerHTML = document.getElementById('world').innerHTML + "<div class='coin' style='top: " + x * 16 + "px; left: " + y * 16 + "px'></div>";
+          }
+        }
+      }
+    }
+
+    // create the html to render pacman in the html
+    function draw_pacman(pacman_direction)
+    {
+      if (pacman_direction == "left")
+        {
+          document.getElementById('world').innerHTML = document.getElementById('world').innerHTML + "<div class='pacman_left' style='top: " + pacman.y * 16 + "px; left: " + pacman.x * 16 + "px'></div>";
+        }
+        else if (pacman_direction == "right")
+        {
+          document.getElementById('world').innerHTML = document.getElementById('world').innerHTML + "<div class='pacman_right' style='top: " + pacman.y * 16 + "px; left: " + pacman.x * 16 + "px'></div>";
+        }
+        else if (pacman_direction == "down")
+        {
+          document.getElementById('world').innerHTML = document.getElementById('world').innerHTML + "<div class='pacman_down' style='top: " + pacman.y * 16 + "px; left: " + pacman.x * 16 + "px'></div>";
+        }
+        else if (pacman_direction == "up")
+        {
+          document.getElementById('world').innerHTML = document.getElementById('world').innerHTML + "<div class='pacman_up' style='top: " + pacman.y * 16 + "px; left: " + pacman.x * 16 + "px'></div>";
+        }
+    }
+    //create the html to render a cherry
+    
+    function draw_cherry()
+    {
+      var x = Math.floor(Math.random() * 20 + 1);
+      var y = Math.floor(Math.random() * 20 + 1);
+
+      while (world[x,y] == 0)
+      {
+        x++;
+        y++;
+        console.log("X = " + x);
+        console.log("Y = " + y);
+      }
+
+      var cherry =
+        {
+          x: x,
+          y: y,
+        } 
+        /*console.log("Cherry.y= " + cherry.y + "Cherry.x = "+ cherry.x);
+        console.log("World x,y = " + world[cherry.y,cherry.x]);*/       
+        document.getElementById('world').innerHTML = document.getElementById('world').innerHTML + "<div class='cherry' style='top: " + cherry.y * 16 + "px; left: " + cherry.x * 16 + "px'></div>";
+    }
+    
+    function draw_score(score, lives)
+    {
+      document.getElementById('score').innerHTML = "";
+      document.getElementById('lives').innerHTML = "";
+      document.getElementById('score').innerHTML = "Score  " + score + "<div class = 'score'></div>";
+      document.getElementById('lives').innerHTML = "Lives  " + lives + "<div class = 'lives'></div>";      
+    }
+
+    // call functions
+    draw_world();
+    draw_pacman(pacman_direction);
+    draw_score(score,lives);
+    draw_cherry();
+
+    document.onkeydown = function(e)
+    {
+// determine if an arrow key was pressed
+
+      //go left
+      if((e.keyCode == 37) && (world[pacman.x-1][pacman.y] != 0))
+      {
+        pacman_direction = "left";
+        pacman.x = pacman.x - 1; 
+      }
+      //go right
+      else if((e.keyCode == 39) && (world[pacman.x+1][pacman.y] != 0))
+      {
+        pacman_direction = "right";
+        pacman.x = pacman.x + 1; 
+      }
+      //go down
+      else if((e.keyCode == 40) && (world[pacman.x][pacman.y+1]) !=0)
+      {
+        pacman_direction = "down";
+        pacman.y = pacman.y + 1;
+      }
+      //go up
+      else if((e.keyCode == 38) && (world[pacman.x][pacman.y-1]) !=0)
+      {
+        pacman_direction = "up";
+        pacman.y = pacman.y - 1;
+      }
+      
+      if(world[pacman.x][pacman.y] == 1)
+      {
+         world[pacman.x][pacman.y] = 2;
+         score = score + 10;
+         document.getElementById('pacman_chomp').play();
+      }
+
+// call functions to update the view
+      draw_world();
+      draw_score(score,lives);
+      draw_pacman(pacman_direction);
+      draw_cherry();
+    }
+
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,112 @@
+.container
+{
+  background-color: black;
+  width: 320px;
+  height: 320px;
+  position: relative;
+}
+/* 0 */
+.brick
+{ 
+  background-color: blue;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  
+}
+/* 1 */
+.coin
+{
+  background-image: url('graphics/yellowdot_large.gif');
+  background-size: cover;
+  width: 8px;
+  height: 8px;
+  position: absolute;
+}
+
+.pacman_right
+{
+  background-image: url('graphics/pacman.gif');
+  background-size: cover;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+}
+
+.pacman_up
+{
+  background-image: url('graphics/pacman_up.jpg');
+  background-size: cover;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+ }
+
+.pacman_left
+{
+  background-image: url('graphics/pacman_left.jpg');
+  background-size: cover;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+}
+
+.pacman_down
+{
+  background-image: url('graphics/pacman_down.jpg');
+  background-size: cover;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+}
+.ghost
+{
+  background-image: url('graphics/ghost.png');
+  background-size: cover;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+}
+/*3*/
+ .cherry
+{
+  background-image: url('graphics/cherry.png');
+  background-size: cover;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+}
+
+/* 2 */
+.blank
+{
+  width: 16px;
+  height: 16px;
+  position: absolute;
+}
+
+.score
+{
+  width: 100px;
+  height: 16px;
+  color: yellow;
+  background-size: cover;
+  position: absolute;
+  left: 10px;
+  top: 290px;
+  font-family: "Impact", Charcoal, sans-serif;
+  font-size: 24px;
+}
+
+ .lives
+{
+  width: 100px;
+  height: 16px;
+  color: yellow;
+  background-size: cover;
+  position: absolute;
+  left: 200px;
+  top: 290px;
+  font-family: "Impact", Charcoal, sans-serif;
+  font-size: 24px;
+}
